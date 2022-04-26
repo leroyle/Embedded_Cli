@@ -29,6 +29,8 @@
 #include "heapCheck.h"
 // end New Command
 
+// App version
+char cliAppVersion [] = "funbiscuit_Cli V0.2";
 // 164 bytes is minimum size for this params on Arduino Nano
 #define CLI_BUFFER_SIZE 400 // 164
 #define CLI_RX_BUFFER_SIZE 16
@@ -37,7 +39,7 @@
 
 // New Command, this needs to be incremented
 // when adding a new command
-#define CLI_BINDING_COUNT 5
+#define CLI_BINDING_COUNT 6
 
 EmbeddedCli *cli;
 
@@ -57,6 +59,8 @@ void onAdc(EmbeddedCli *cli, char *args, void *context);
 void onStackCheck(EmbeddedCli *cli, char *args, void *context);
 
 void onHeapCheck(EmbeddedCli *cli, char *args, void *context);
+
+void onGetAppVersion(EmbeddedCli *cli, char *args, void *context);
 // end New Command
 
 void setup() {
@@ -115,6 +119,15 @@ void setup() {
             nullptr,
             onHeapCheck
     });
+
+    embeddedCliAddBinding(cli, {
+            "appVersion",
+            "Get App Version String",
+            true,
+            nullptr,
+            onGetAppVersion
+    });
+    
     // end New Command
 
     cli->onCommand = onCommand;
@@ -176,6 +189,11 @@ void onStackCheck(EmbeddedCli *cli, char *args, void *context) {
 void onHeapCheck(EmbeddedCli *cli, char *args, void *context) {
     Serial.print(F("onHeapCheck: "));
     checkHeapSpace();
+    Serial.print("\r\n");
+}
+
+void onGetAppVersion (EmbeddedCli *cli, char *args, void *context) {
+    Serial.print(cliAppVersion);
     Serial.print("\r\n");
 }
 // End New Command
