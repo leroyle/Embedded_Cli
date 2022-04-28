@@ -43,21 +43,21 @@ uint32_t checkHeapSpace()
   TaskStatus_t xTaskDetails;
   getTaskDetails(&xTaskDetails);
 
-  // values from app linker .map file
-  // Name   Origin             Length             Attributes
-  // FLASH  0x0000000000026000 0x00000000000c7000 xr
-  // RAM    0x0000000020006000 0x000000000003a000 xrw
-  // StackStart == ram origin + Length
-  // 0x20040000    = 0x20006000 + 0x3a000
+  // The called functions use info from the linker .map file
+  // extern unsigned char __HeapBase[];
+  // extern unsigned char __HeapLimit[];
+  
+  uint32_t sbrkVal = (uint32_t ) reinterpret_cast<char*>(sbrk(0));
+  printf(PSTR("\r\n(%s): Heap Space Check()\r\n=========================> \r\n"), xTaskDetails.pcTaskName);
+  printf(PSTR("Current sbrk() value: 0x%x\r\n"), (unsigned int)sbrkVal);
+  int total = dbgHeapTotal(); 
+  int used = dbgHeapUsed();
+  int free =  dbgHeapFree();
 
-  uint32_t stackStart = 0x20040000; // value from app linker map file
-  uint32_t ramEnd = stackStart + 1;
-  uint32_t sbrkVal = (uint32_t) reinterpret_cast<char *>(sbrk(0));
-  uint32_t ramLeft = ramEnd - sbrkVal;
-  printf(PSTR("\r\n(%s): Heap Space Check() =======> \r\n"), xTaskDetails.pcTaskName);
-  printf(PSTR("\tCurrent sbrk() value: 0x%x\r\n\tAvailable Memory:     0x%x\r\n"), (unsigned int)sbrkVal, (unsigned int)ramLeft);
-  printf(PSTR("Heap Space Check() =======> \r\n\r\n"));
-  return ramLeft;
+  printf("Total:  %d (0x%x) \r\nUsed:   %d (0x%x) \r\nFree:   %d (0x%x)\r\n", total, total, used, used, free, free);
+  printf(PSTR("=========================> \r\n\r\n"));
+ 
+  return dbgHeapFree();
 }
 
 /**
