@@ -9,8 +9,10 @@ extern "C" {
 #include "stackCheck.h"
 #include "repeatCommand.h"
 #include "heapCheck.h"
+#include "versionCommand.h"
 
 
+char cliAppVersion [VERSION_MAX];
 void cliTask(void *arg);
 
 static TaskHandle_t  _cliTaskHandle;
@@ -35,6 +37,8 @@ void registerCustomCommands()
     registerRepeatCommand();
     registerStackCheckCommand();
     registerHeapCheckCommand();
+    registerVersionCommand();
+    
 }
 
 /*****************************************************************************\
@@ -251,12 +255,7 @@ BaseType_t timeCommand(char *pcWriteBuffer,size_t xWriteBufferLen,const char *pc
 
     uint32 time = RTC_GetTime();
     
-    uint32void registerCustomCommands()
-{
-    registerRepeatCommand();
-    registerStackCheckCommand();
-    registerHeapCheckCommand();
-}_t hours = RTC_GetHours(time);
+    uint32_t hours = RTC_GetHours(time);
     uint32_t minutes = RTC_GetMinutes(time);
     uint32_t seconds = RTC_GetSecond(time);
     uint32_t ampm = RTC_GetAmPm(time);

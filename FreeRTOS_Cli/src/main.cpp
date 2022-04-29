@@ -9,6 +9,7 @@ extern bool RepeatCommand;
 
 void setup() {
     // put your setup code here, to run once:
+  strncpy(cliAppVersion, "FreeRTOS_Cli V0.3", VERSION_MAX) ;
   Serial.begin(115200);
   // create the RTOS CLI task
   xCreateCLITask(); 

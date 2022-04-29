@@ -15,9 +15,11 @@ void stackCheck()
 
 void dbgStackCheck()
 {
+	Serial.println("test1");
+  Serial.flush();
 // Print Task list with stack left stat
   uint32_t tasknum = uxTaskGetNumberOfTasks();
-  char* buf = (char*) rtos_malloc(tasknum*40); // 40 bytes per task
+  char* buf = (char*) rtos_malloc(tasknum*80); // 40 bytes per task
 
   loc_vTaskList(buf);
 
@@ -25,8 +27,8 @@ void dbgStackCheck()
   PRINTF("-------------------------------------------------------------------------------\r\n");
   PRINTF(buf);
   PRINTF("\n");
+  
   rtos_free(buf);
-
 }
 
 /**
@@ -132,31 +134,23 @@ void loc_vTaskList(char * pcWriteBuffer )
 				// Some of the tasks are created via xTaskCreateStatic()
 				// which uses a different stack creation alogrithm than does the non static version 
 				volatile int32_t myValue = 0;
-				// PRINTF("Name: %s\r\n", pxTaskStatusArray[x].pcTaskName);
-				myValue = *(pxTaskStatusArray[x].pxStackBase-2);
-				// PRINTF("Value 2: %d\r\n", myValue);
+				volatile int32_t myValueWords = 0;
+				myValue = *(pxTaskStatusArray[x].pxStackBase-1);
 				
 				if (myValue < (int32_t) 20 || myValue == -1 )
 				{
-					myValue = *(pxTaskStatusArray[x].pxStackBase-1);
-				 	// PRINTF("Value 1: %d\r\n", myValue);
+					myValue = *(pxTaskStatusArray[x].pxStackBase-2);
 					 if (myValue < (int32_t) 20)
 					{
-						myValue = *(pxTaskStatusArray[x].pxStackBase-0);
-						// PRINTF("Value 0: %d\r\n", myValue);
-						if (myValue < (int32_t) 20)
-						{
-							myValue = 0;
-							// PRINTF("Value Default: %d\r\n", myValue);
-						}
+						myValue = 0;
 					}
 				}
 				if (myValue != 0)
 				{
-					myValue = myValue/4;
+					myValueWords = myValue/4;
 				}
 				// sprintf( pcWriteBuffer, "\t%c\t%u\t%u\t%u\r\n", cStatus, ( unsigned int ) pxTaskStatusArray[ x ].uxCurrentPriority, ( unsigned int ) pxTaskStatusArray[ x ].usStackHighWaterMark, ( unsigned int ) pxTaskStatusArray[ x ].xTaskNumber);
-				sprintf( pcWriteBuffer, "\t%c\t%u\t%u\t%u\t%p\t%d/%d\r\n", cStatus, ( unsigned int ) pxTaskStatusArray[ x ].uxCurrentPriority, ( unsigned int ) pxTaskStatusArray[ x ].usStackHighWaterMark, ( unsigned int ) pxTaskStatusArray[ x ].xTaskNumber, pxTaskStatusArray[x].pxStackBase, *(pxTaskStatusArray[x].pxStackBase-2), myValue );
+				sprintf( pcWriteBuffer, "\t%c\t%u\t%u\t%u\t%p\t%lu/%lu\r\n", cStatus, ( unsigned int ) pxTaskStatusArray[ x ].uxCurrentPriority, ( unsigned int ) pxTaskStatusArray[ x ].usStackHighWaterMark, ( unsigned int ) pxTaskStatusArray[ x ].xTaskNumber, pxTaskStatusArray[x].pxStackBase, myValue, myValueWords );
 				pcWriteBuffer += strlen( pcWriteBuffer );
 			
 			}

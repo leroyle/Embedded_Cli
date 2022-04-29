@@ -4,6 +4,9 @@
 extern "C" {
 void xCreateCLITask();
 }
+// App version
+#define VERSION_MAX 50
+extern char cliAppVersion [VERSION_MAX];
 
 typedef BaseType_t Peripheral_Descriptor_t;
 size_t FreeRTOS_read( Peripheral_Descriptor_t const pxPeripheral, 
