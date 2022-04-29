@@ -30,7 +30,7 @@
 #include "heapCheck.h"
 
 // App version
-char cliAppVersion [] = "funbiscuit_Embed_Cli V0.2";
+char cliAppVersion [] = "funbiscuit_Embed_Cli V0.3";
 
 // end New Command
 
@@ -195,13 +195,13 @@ void onAdc(EmbeddedCli *cli, char *args, void *context) {
 
 // New Command
 void onStackCheck(EmbeddedCli *cli, char *args, void *context) {
-    Serial.print(F("onStackCheck: "));
+    Serial.println(F("onStackCheck: "));
     stackCheck();
     Serial.print("\r\n");
 }
 
 void onHeapCheck(EmbeddedCli *cli, char *args, void *context) {
-    Serial.print(F("onHeapCheck: "));
+    Serial.println(F("onHeapCheck: "));
     checkHeapSpace();
     Serial.print("\r\n");
 }

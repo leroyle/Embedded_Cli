@@ -36,7 +36,6 @@ void registerHeapCheckCommand()
  * Print heap details
  * 
  */
-
 uint32_t checkHeapSpace()
 {
 
@@ -83,3 +82,4 @@ const char *getTaskName()
 
   return xTaskDetails.pcTaskName;
 }
+
