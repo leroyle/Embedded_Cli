@@ -26,12 +26,12 @@
 #include "cli.h"
 
 EmbeddedCli * appCli = NULL;
+#define appVersion "funbiscuit_Cli V0.3"
 
 void setup() {
-    strncpy(cliAppVersion, "funbiscuit_Cli V0.3", VERSION_MAX) ;
     Serial.begin(115200);
 
-    appCli = cliSetup();
+    appCli = cliSetup(appVersion);
     if (appCli == NULL) {
         Serial.println(F("Cli was not created. Check sizes!"));
         return;

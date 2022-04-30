@@ -43,14 +43,17 @@ void onGetAppVersion(EmbeddedCli *cli, char *args, void *context);
 
 // end New Command
 
-// CLI Task
-// void cliTask(void *arg);
-// static TaskHandle_t  _cliTaskHandle;
-// #define CLI_STACK_SZ       (256*4)
-//
-
-EmbeddedCli * cliSetup() {
+EmbeddedCli * cliSetup(const char *appVersionString) {
    
+   // App version
+    if (appVersionString != NULL)
+    {
+        strncpy(cliAppVersion, appVersionString, VERSION_MAX) ;
+    }
+    else
+    {
+         strncpy(cliAppVersion, "App Version not defined", VERSION_MAX) ;
+    }
     EmbeddedCliConfig *config = embeddedCliDefaultConfig();
     config->cliBuffer = cliBuffer;
     config->cliBufferSize = CLI_BUFFER_SIZE * sizeof(CLI_UINT);
@@ -65,10 +68,7 @@ EmbeddedCli * cliSetup() {
         return NULL;
     }
     Serial.println(F("Cli has started. Enter your commands."));
-
-    // create the CLI handler
-   // xTaskCreate(cliTask, "CLI_Handler", CLI_STACK_SZ, NULL, TASK_PRIO_LOW, &_cliTaskHandle);
-    
+  
     embeddedCliAddBinding(cli, {
             "get-led",
             "Get led status",
@@ -119,9 +119,7 @@ EmbeddedCli * cliSetup() {
 
     cli->onCommand = onCommand;
     cli->writeChar = writeChar;
-     // create the CLI RTOS handler
-   //  xTaskCreate(cliTask, "CLI_Handler", CLI_STACK_SZ, NULL, TASK_PRIO_LOW, &_cliTaskHandle);
-
+ 
     return cli;
 }
 
@@ -179,23 +177,4 @@ void onGetAppVersion (EmbeddedCli *cli, char *args, void *context) {
 
 void writeChar(EmbeddedCli *embeddedCli, char c) {
     Serial.write(c);
-}
-
-void cliTask(void *arg)
-{
-    // use some stack space
-    char buff[2000];
-    buff[0] = '\0';
-    sprintf(buff, "test me\r\n");
-    while(1)
-    {
-        // provide all chars to cli
-        while (Serial.available() > 0) {
-            embeddedCliReceiveChar(cli, Serial.read());
-        }
-
-        embeddedCliProcess(cli);
-        // let other tasks run
-        // yield();
-    }
 }

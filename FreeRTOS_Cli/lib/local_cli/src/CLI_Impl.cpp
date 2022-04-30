@@ -18,8 +18,17 @@ void cliTask(void *arg);
 static TaskHandle_t  _cliTaskHandle;
 
 #define CLI_STACK_SZ       (256*4)
-void xCreateCLITask()
+void xCreateCLITask(const char * appVersionString)
 {
+    // App version
+  if (appVersionString != NULL)
+  {
+    strncpy(cliAppVersion, appVersionString, VERSION_MAX) ;
+  }
+  else
+  {
+    strncpy(cliAppVersion, "App Version not defined", VERSION_MAX) ;
+  } 
   xTaskCreate(cliTask, "CLI_Handler", CLI_STACK_SZ, NULL, TASK_PRIO_LOW, &_cliTaskHandle);
   Serial.println("In xCreateCLITask");
 }

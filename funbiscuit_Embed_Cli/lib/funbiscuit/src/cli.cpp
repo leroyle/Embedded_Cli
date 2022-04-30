@@ -49,11 +49,17 @@ static TaskHandle_t  _cliTaskHandle;
 #define CLI_STACK_SZ       (256*4)
 //
 
-uint8_t cliSetup() {
+uint8_t cliSetup(const char *appVersion) {
    
-   // App version
-    strncpy(cliAppVersion, "funbiscuit_Embed_Cli V0.3", VERSION_MAX) ;
-
+    // App version
+    if (appVersion != NULL)
+    {
+        strncpy(cliAppVersion, appVersion, VERSION_MAX) ;
+    }
+    else
+    {
+         strncpy(cliAppVersion, "App Version not defined", VERSION_MAX) ;
+    } 
     EmbeddedCliConfig *config = embeddedCliDefaultConfig();
     config->cliBuffer = cliBuffer;
     config->cliBufferSize = CLI_BUFFER_SIZE * sizeof(CLI_UINT);

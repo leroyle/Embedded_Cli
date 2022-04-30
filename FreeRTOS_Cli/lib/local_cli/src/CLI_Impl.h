@@ -2,7 +2,7 @@
 #define __CLI_IMPL_H__
 
 extern "C" {
-void xCreateCLITask();
+void xCreateCLITask(const char * appVersionString);
 }
 // App version
 #define VERSION_MAX 50

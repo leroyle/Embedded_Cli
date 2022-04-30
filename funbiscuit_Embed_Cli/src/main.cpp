@@ -27,11 +27,13 @@
 // the CLI interface
 #include "cli.h"
 
+#define _AppVersion "funbiscuit_Embed_Cli V0.3"
+
 void setup() {
     Serial.begin(115200);
 
     // init the CLI interface
-    uint8_t cliRc = cliSetup();
+    uint8_t cliRc = cliSetup(_AppVersion);
     if (cliRc == 0)
     {
         Serial.println(F("Cli has started. Enter your commands."));
