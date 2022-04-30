@@ -145,21 +145,26 @@ void loc_vTaskList(char * pcWriteBuffer )
 				pcWriteBuffer = loc_prvWriteNameToBuffer( pcWriteBuffer, pxTaskStatusArray[ x ].pcTaskName );
 				/* Write the rest of the string. */
 				
-				// trying to get to the size of the allocated stack buffer
-				// the size seems to be stored at an address just before the returned
-				// stack address pointer. Sometimes pointer -1, sometimes pointer -2, not sure
-				// why the difference at this point.
-				// Some of the tasks are created via xTaskCreateStatic()
-				// which uses a different stack creation alogrithm than does the non static version 
+				/** trying to get to the size of the allocated stack buffer
+				  * The implementation of malloc Adafruit/FreeRTOS uses
+				  * https://github.com/eblot/newlib/blob/master/newlib/libc/stdlib/nano-mallocr.c
+				  * stores the allocated size at the returned address -1 or -2.
+				  * The size is stored at -2 if malloc needs to pad for alignment, addr -1 is the
+				  * negative offset to the size address.
+				  * if no padding is required, size is found at addr-1
+				  * Thus we can test addr-1, not negative we have the size, if it
+				  * is negative we must get the size from addr-2. Seems to work for
+				  * this implementation of malloc.  
+				*/ 
+				
 				volatile int32_t myValue = 0;
 				volatile int32_t myValueWords = 0;
 
 				myValue = *(pxTaskStatusArray[x].pxStackBase-1);
-				
-				if (myValue < (int32_t) 20 || myValue == -1 )
+				if (myValue < (int32_t) 0)
 				{
 					myValue = *(pxTaskStatusArray[x].pxStackBase-2);
-					 if (myValue < (int32_t) 20)
+					 if (myValue < (int32_t) 0)
 					{
 						myValue = 0;
 					}
