@@ -1,4 +1,9 @@
 
+ 18-Aug-2022
+  Only in the funbiscuit_Cli example
+     Add support for Seeed Xiao BLE, just a platformio.ini entry
+     Add support to exhaust stack and heap from within app. 
+
  A collection of examples demonstrating the use of Embedded CLI
  - these are platformio apps targeting RakWireless Wisblock devices
  - after building/uploading the app
