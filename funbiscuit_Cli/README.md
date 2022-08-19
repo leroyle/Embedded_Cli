@@ -41,8 +41,9 @@ Once the project has been build, unzip the update files into your PlatformIO
 installation area, by default within your user home directory
 
 For Linux that would be
+- download this repo, locate the assets/*.zip files
 #> cd ~/.platformio
-#> unzip platforms.zip
-#> unzip framework.zip
+#> unzip "DOWNLOAD_DIR"/assets/platforms.zip
+#> unzip "DOWNLOAD_DIR"/assets/framework.zip
 
 You should now be able to create a new project targeting either Wisblock or Seeed Xiao BLE.
